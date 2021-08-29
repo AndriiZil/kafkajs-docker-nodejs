@@ -5,19 +5,18 @@ const kafka = new Kafka({
     brokers: ['localhost:9092']
 });
 
-const topicName = 'orderCreated';
+const topics = [
+    { topic: 'orderCreated', numPartitions: 2, replicationFactor: 1 },
+    { topic: 'payment', numPartitions: 2, replicationFactor: 1 },
+    { topic: 'email', numPartitions: 2, replicationFactor: 1 },
+    { topic: 'test-topic', numPartitions: 2, replicationFactor: 1 },
+]
 
 const process  = async () => {
     const admin = kafka.admin();
+
     await admin.connect();
-    await admin.createTopics({
-        topics: [{
-            topic: topicName,
-            numPartitions: 2,
-            replicationFactor: 1
-        }
-        ],
-    });
+    await admin.createTopics({ topics });
     await admin.disconnect();
 };
 
